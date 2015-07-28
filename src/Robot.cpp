@@ -59,12 +59,20 @@ private:
 	void TeleopPeriodic()
 	{
 		DriveSystem->SetSafetyEnabled(false);
+		
+		if(Math.abs(LeftStick->GetY()) + .01 < Math.abs(LeftStickInput)){ //--Set a Maximum deceleration speed.
+			LeftStickInput *= 0.97;
+		}else{
+			LeftStickInput = LeftStick->GetY();	
+		}
+		if(Math.abs(RightStick->GetY()) + .01 < Math.abs(RightStickInput)){
+			RightStickInput *= 0.97;
+		}else{
+			RightStickInput = LeftStick->GetY();
+		}
 
-		LeftStickInput = LeftStick->GetY();
-		RightStickInput = RightStick->GetY();
-
-		LeftStickInput = LeftStickInput * -1;
-		RightStickInput = RightStickInput * -1;
+		LeftStickInput *= -1;
+		RightStickInput *= -1;
 
 		if (RightStick->GetRawButton(1) == true)
 		{
