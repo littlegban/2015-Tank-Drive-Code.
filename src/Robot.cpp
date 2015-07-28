@@ -60,12 +60,12 @@ private:
 	{
 		DriveSystem->SetSafetyEnabled(false);
 		
-		if(Math.abs(LeftStick->GetY()) + .01 < Math.abs(LeftStickInput)){ //--Set a Maximum deceleration speed.
+		if(abs(LeftStick->GetY()) + .01 < abs(LeftStickInput)){ //--Set a Maximum deceleration speed.
 			LeftStickInput *= 0.97;
 		}else{
 			LeftStickInput = LeftStick->GetY();	
 		}
-		if(Math.abs(RightStick->GetY()) + .01 < Math.abs(RightStickInput)){
+		if(abs(RightStick->GetY()) + .01 < abs(RightStickInput)){
 			RightStickInput *= 0.97;
 		}else{
 			RightStickInput = LeftStick->GetY();
@@ -96,6 +96,14 @@ private:
 
 		//servocam->SetAngle(RightStick->GetRawAxis(3));*/
 	}//End TeleopPeriodic
+	
+	float abs(float f){
+		if(f < 0){
+			return f * -1;
+		}else{
+			return f;
+		}
+	}
 }; //End Robot Class
 
 START_ROBOT_CLASS(Robot);
