@@ -28,9 +28,12 @@ private:
 		TalonSRX2 = new CANTalon(2);
 		TalonSRX3 = new CANTalon(3);
 		TalonSRX4 = new CANTalon(4);
-
+		
 		DriveSystem = new RobotDrive(TalonSRX1, TalonSRX2, TalonSRX3, TalonSRX4);
-
+		
+		DriveSystem->SetInvertedMotor(TalonSRX3, true);
+		DriveSystem->SetInvertedMotor(TalonSRX4, true);
+		
 		LeftStick = new Joystick(0);
 		RightStick = new Joystick(1);
 		XBoxPlayer1 = new Joystick(2);
@@ -85,7 +88,8 @@ private:
 		}
 
 		DriveSystem->TankDrive(LeftStickInput, RightStickInput, false); //KAWAII :3
-
+		
+		
 		if(XBoxPlayer1->GetRawButton(5) == true) LiftMotor->Set(-1);
 		if(XBoxPlayer1->GetRawButton(6) == true) LiftMotor->Set(1);
 		if(XBoxPlayer1->GetRawButton(5) != true and XBoxPlayer1->GetRawButton(6) != true) LiftMotor->Set(0.0);
