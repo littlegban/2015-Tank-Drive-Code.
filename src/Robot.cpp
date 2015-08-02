@@ -31,8 +31,8 @@ private:
 		
 		DriveSystem = new RobotDrive(TalonSRX1, TalonSRX2, TalonSRX3, TalonSRX4);
 		
-		DriveSystem->SetInvertedMotor(TalonSRX3, true);
-		DriveSystem->SetInvertedMotor(TalonSRX4, true);
+		drive->SetInvertedMotor(TalonSRX3, true);
+		drive->SetInvertedMotor(TalonSRX4, true);
 		
 		LeftStick = new Joystick(0);
 		RightStick = new Joystick(1);
