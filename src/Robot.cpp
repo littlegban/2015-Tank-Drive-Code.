@@ -28,12 +28,10 @@ private:
 		TalonSRX2 = new CANTalon(2);
 		TalonSRX3 = new CANTalon(3);
 		TalonSRX4 = new CANTalon(4);
-		
+
 		DriveSystem = new RobotDrive(TalonSRX1, TalonSRX2, TalonSRX3, TalonSRX4);
-		
-		drive->SetInvertedMotor(TalonSRX3, true);
-		drive->SetInvertedMotor(TalonSRX4, true);
-		
+
+
 		LeftStick = new Joystick(0);
 		RightStick = new Joystick(1);
 		XBoxPlayer1 = new Joystick(2);
@@ -62,17 +60,28 @@ private:
 	void TeleopPeriodic()
 	{
 		DriveSystem->SetSafetyEnabled(false);
-		
-		if(abs(LeftStick->GetY()) + .01 < abs(LeftStickInput)){ //--Set a Maximum deceleration speed.
-			LeftStickInput *= 0.97;
+
+		if(abs(LeftStick->GetY()) + .05 < abs(LeftStickInput)){ //--Set a Maximum deceleration speed.
+			LeftStickInput *= 0.9;
 		}else{
-			LeftStickInput = LeftStick->GetY();	
+			LeftStickInput = LeftStick->GetY();
 		}
-		if(abs(RightStick->GetY()) + .01 < abs(RightStickInput)){
-			RightStickInput *= 0.97;
+		if(abs(RightStick->GetY()) + .05 < abs(RightStickInput)){
+			RightStickInput *= 0.9;
 		}else{
-			RightStickInput = LeftStick->GetY();
+			RightStickInput = RightStick->GetY();
 		}
+
+
+		if(abs(RightStickInput) < 0.115){
+			RightStickInput = 0;
+		}
+		if(abs(LeftStickInput) < 0.115){
+			LeftStickInput = 0;
+		}
+
+
+
 
 		LeftStickInput *= -1;
 		RightStickInput *= -1;
@@ -88,8 +97,8 @@ private:
 		}
 
 		DriveSystem->TankDrive(LeftStickInput, RightStickInput, false); //KAWAII :3
-		
-		
+
+
 		if(XBoxPlayer1->GetRawButton(5) == true) LiftMotor->Set(-1);
 		if(XBoxPlayer1->GetRawButton(6) == true) LiftMotor->Set(1);
 		if(XBoxPlayer1->GetRawButton(5) != true and XBoxPlayer1->GetRawButton(6) != true) LiftMotor->Set(0.0);
@@ -100,7 +109,7 @@ private:
 
 		//servocam->SetAngle(RightStick->GetRawAxis(3));*/
 	}//End TeleopPeriodic
-	
+
 	float abs(float f){
 		if(f < 0){
 			return f * -1;
