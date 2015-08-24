@@ -15,7 +15,8 @@ private:
 	Joystick *RightStick;
 	float RightStickInput = 0.0;
 	Joystick *XBoxPlayer1;
-
+	bool safety = false;
+	
 	Talon *LiftMotor;
 
 	DoubleSolenoid *ArmSolenoid;
@@ -60,53 +61,65 @@ private:
 	void TeleopPeriodic()
 	{
 		DriveSystem->SetSafetyEnabled(false);
-
-		if(abs(LeftStick->GetY()) + .05 < abs(LeftStickInput)){ //--Set a Maximum deceleration speed.
-			LeftStickInput *= 0.9;
-		}else{
-			LeftStickInput = LeftStick->GetY();
+		if(safety == true && XBoxPlayer1->GetRawButton(3)){
+			safety = false;
 		}
-		if(abs(RightStick->GetY()) + .05 < abs(RightStickInput)){
-			RightStickInput *= 0.9;
-		}else{
-			RightStickInput = RightStick->GetY();
-		}
+		
+		
+		if(safety == false){
+			
+			if(XBoxPlayer1->GetRawButton(3)){
+				safety == true;
+			}
+			
+			if(abs(LeftStick->GetY()) + .05 < abs(LeftStickInput)){ //--Set a Maximum deceleration speed.
+				LeftStickInput *= 0.9;
+			}else{
+				LeftStickInput = LeftStick->GetY();
+			}
+			if(abs(RightStick->GetY()) + .05 < abs(RightStickInput)){
+				RightStickInput *= 0.9;
+			}else{
+				RightStickInput = RightStick->GetY();
+			}
 
 
-		if(abs(RightStickInput) < 0.115){
-			RightStickInput = 0;
-		}
-		if(abs(LeftStickInput) < 0.115){
-			LeftStickInput = 0;
-		}
+			if(abs(RightStickInput) < 0.115){
+				RightStickInput = 0;
+			}
+			if(abs(LeftStickInput) < 0.115){
+				LeftStickInput = 0;
+			}
 
 
 
 
-		LeftStickInput *= -1;
-		RightStickInput *= -1;
+			LeftStickInput *= -1;
+			RightStickInput *= -1;
 
-		if (RightStick->GetRawButton(1) == true)
-		{
-			LeftStickInput = RightStick->GetY();
-		}
-		if (LeftStick->GetRawButton(1) == true)
-		{
-			LeftStickInput = LeftStickInput / 2;
-			RightStickInput = RightStickInput / 2;
-		}
+			if (RightStick->GetRawButton(1) == true)
+			{
+				LeftStickInput = RightStick->GetY();
+			}
+			if (LeftStick->GetRawButton(1) == true)
+			{
+				LeftStickInput = LeftStickInput / 2;
+				RightStickInput = RightStickInput / 2;
+			}
 
-		DriveSystem->TankDrive(LeftStickInput, RightStickInput, false); //KAWAII :3
+			DriveSystem->TankDrive(LeftStickInput, RightStickInput, false); //KAWAII :3
 
 
-		if(XBoxPlayer1->GetRawButton(5) == true) LiftMotor->Set(-1);
-		if(XBoxPlayer1->GetRawButton(6) == true) LiftMotor->Set(1);
-		if(XBoxPlayer1->GetRawButton(5) != true and XBoxPlayer1->GetRawButton(6) != true) LiftMotor->Set(0.0);
+			if(XBoxPlayer1->GetRawButton(5) == true) LiftMotor->Set(-1);
+			if(XBoxPlayer1->GetRawButton(6) == true) LiftMotor->Set(1);
+			if(XBoxPlayer1->GetRawButton(5) != true and XBoxPlayer1->GetRawButton(6) != true) LiftMotor->Set(0.0);
 
-		if (XBoxPlayer1->GetRawButton(1) == true) ArmSolenoid->Set(DoubleSolenoid::Value::kForward);
-		if (XBoxPlayer1->GetRawButton(2) == true) ArmSolenoid->Set(DoubleSolenoid::Value::kReverse);
-		if (XBoxPlayer1->GetRawButton(1) != true and XBoxPlayer1->GetRawButton(2) != true) ArmSolenoid->Set(DoubleSolenoid::Value::kOff);
-
+			if (XBoxPlayer1->GetRawButton(1) == true) ArmSolenoid->Set(DoubleSolenoid::Value::kForward);
+			if (XBoxPlayer1->GetRawButton(2) == true) ArmSolenoid->Set(DoubleSolenoid::Value::kReverse);
+			if (XBoxPlayer1->GetRawButton(1) != true and XBoxPlayer1->GetRawButton(2) != true) ArmSolenoid->Set(DoubleSolenoid::Value::kOff);
+		} 
+		
+		
 		//servocam->SetAngle(RightStick->GetRawAxis(3));*/
 	}//End TeleopPeriodic
 
